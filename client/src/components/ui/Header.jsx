@@ -5,7 +5,7 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="mx-auto px-4 py-6 sticky top-0 shadow-md bg-white dark:bg-slate-900 z-50">
+    <header className="px-4 py-6 sticky top-0 shadow-md bg-white dark:bg-slate-900 z-50">
       <div className="flex items-center justify-between max-w-[1024px] mx-auto">
         <div className="flex items-center space-x-2">
           <Code className="h-8 w-8 text-blue-600" />

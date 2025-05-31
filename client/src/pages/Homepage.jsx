@@ -1,15 +1,10 @@
 import { Code, Users, Zap } from "lucide-react";
-import Header from "../components/ui/Header";
-import Footer from "../components/ui/Footer";
 import JoinRoom from "../components/ui/JoinRoom";
 import CreateRoomButton from "../components/buttons/CreateRoomButton";
-import { Link } from "react-router-dom";
 
 export default function Homepage() {
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <Header />
-
+    <div className="container mx-auto px-4 py-16 md:py-24">
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center">
@@ -108,7 +103,6 @@ export default function Homepage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
