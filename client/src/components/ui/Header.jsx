@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Code, Moon, Sun } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
-
+import { useTheme } from "../../context/ThemeContext";
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
 

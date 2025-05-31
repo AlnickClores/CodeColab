@@ -1,6 +1,9 @@
-import { Code, Users, Zap, ArrowRight } from "lucide-react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { Code, Users, Zap } from "lucide-react";
+import Header from "../components/ui/Header";
+import Footer from "../components/ui/Footer";
+import JoinRoom from "../components/ui/JoinRoom";
+import CreateRoomButton from "../components/buttons/CreateRoomButton";
+import { Link } from "react-router-dom";
 
 export default function Homepage() {
   return (
@@ -58,10 +61,7 @@ export default function Homepage() {
 
             {/* Create Room */}
             <div className="flex justify-center mb-6">
-              <button className="cursor-pointer flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-full px-8 py-2 rounded-md text-lg font-medium">
-                Create New Room
-                <ArrowRight className="ml-2 mt-1 h-5 w-5" />
-              </button>
+              <CreateRoomButton />
             </div>
 
             <div className="flex items-center my-6">
@@ -73,21 +73,7 @@ export default function Homepage() {
             </div>
 
             {/* Join Room */}
-            <div className="space-y-4">
-              <div className="flex flex-col gap-3">
-                <input
-                  type="text"
-                  placeholder="Enter room code"
-                  className="flex-1 text-center text-black dark:text-white border border-slate-500 rounded-md py-1"
-                />
-                <button className="cursor-pointer w-full px-8 py-2 rounded-md border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950">
-                  Join Room
-                </button>
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Have a room code? Enter it above to join your coding buddy.
-              </p>
-            </div>
+            <JoinRoom />
           </div>
 
           {/* Additional Info */}

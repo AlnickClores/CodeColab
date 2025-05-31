@@ -8,7 +8,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 const router = createBrowserRouter([
   { path: "/", element: <Homepage /> },
-  { path: "/room", element: <Roompage /> },
+  { path: "/room/:roomId", element: <Roompage /> },
   { path: "*", element: <h1>404 Not Found</h1> },
 ]);
 
