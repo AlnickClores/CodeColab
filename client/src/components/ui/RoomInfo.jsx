@@ -29,8 +29,9 @@ const RoomInfo = ({ roomId, sessionId }) => {
       console.error("Failed to copy room ID:", err);
     }
   };
+
   return (
-    <div className="flex flex-col justify-between sm:flex-row p-4 bg-white dark:bg-slate-800 shadow-md rounded-md space-y-3">
+    <div className="flex flex-col justify-between sm:flex-row p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md rounded-md space-y-3">
       <div className="flex items-center gap-5">
         <div>
           <h1 className="font-semibold text-black dark:text-white text-2xl">
