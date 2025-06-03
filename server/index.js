@@ -2,12 +2,25 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const axios = require("axios");
 
 const app = express();
 const server = http.createServer(app);
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
   },
 });
 
@@ -100,8 +113,19 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001, () => {
-  console.log("Socket.IO server running on http://localhost:3001");
+app.post("/execute", async (req, res) => {
+  try {
+    const pistonResponse = await axios.post(
+      "https://emkc.org/api/v2/piston/execute",
+      req.body
+    );
+    res.json(pistonResponse.data);
+  } catch (error) {
+    console.error("Execution error:", error.message);
+    res.status(500).json({ error: error.message || "Execution failed" });
+  }
 });
 
-console.log(rooms);
+server.listen(3001, () => {
+  console.log("🚀 Server running on http://localhost:3001");
+});

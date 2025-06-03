@@ -20,8 +20,8 @@ const Roompage = () => {
         onLanguageSelect={setLanguage}
         selectedLanguage={language}
       />
-      <div className="my-6">
-        <CodeEditor language={language} />
+      <div>
+        <CodeEditor language={language} roomId={roomId} />
       </div>
     </div>
   );
