@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -19,7 +19,7 @@ app.use(express.json());
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -68,6 +68,14 @@ io.on("connection", (socket) => {
 
     io.to(roomId).emit("user-count", userCount);
     logRoomsStatus();
+  });
+
+  socket.on("code-change", ({ roomId, code }) => {
+    socket.to(roomId).emit("code-change", { code });
+  });
+
+  socket.on("cursor-change", ({ roomId, position, userId }) => {
+    socket.to(roomId).emit("cursor-change", { position, userId });
   });
 
   socket.on("leave-room", (roomId) => {

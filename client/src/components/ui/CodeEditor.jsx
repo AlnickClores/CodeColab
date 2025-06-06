@@ -3,19 +3,96 @@ import { useTheme } from "../../context/ThemeContext";
 import { useRef, useState, useEffect } from "react";
 import { codeSnippets } from "../../utils/codeSnippets";
 import OutputBox from "./OutputBox";
+import { io } from "socket.io-client";
+import { getUserColor } from "../../utils/userColors";
+import * as monaco from "monaco-editor";
 
-const CodeEditor = ({ language = "javascript" }) => {
+const socket = io("http://localhost:3001");
+
+const CodeEditor = ({ language = "javascript", roomId }) => {
   const { theme } = useTheme();
   const editorRef = useRef();
   const [value, setValue] = useState(codeSnippets[language]);
+  const decorationsRef = useRef([]);
 
   useEffect(() => {
     setValue(codeSnippets[language]);
   }, [language]);
 
+  useEffect(() => {
+    socket.emit("join-room", roomId);
+
+    socket.on("code-change", ({ code }) => {
+      if (editorRef.current && code !== editorRef.current.getValue()) {
+        editorRef.current.setValue(code);
+      }
+    });
+
+    socket.on("cursor-change", ({ userId, position }) => {
+      if (!editorRef.current) return;
+
+      const color = getUserColor(userId);
+      const decorations = editorRef.current.deltaDecorations(
+        decorationsRef.current,
+        [
+          {
+            range: new monaco.Range(
+              position.lineNumber,
+              position.column,
+              position.lineNumber,
+              position.column
+            ),
+            options: {
+              className: "remote-cursor",
+              beforeContentClassName: `remote-cursor-${userId}`,
+            },
+          },
+        ]
+      );
+      decorationsRef.current = decorations;
+
+      const styleEl = document.querySelector(`#cursor-style-${userId}`);
+      if (!styleEl) {
+        const style = document.createElement("style");
+        style.id = `cursor-style-${userId}`;
+        style.innerHTML = `
+          .monaco-editor .remote-cursor-${userId}::before {
+            content: "";
+            display: inline-block;
+            background-color: ${color};
+            width: 2px;
+            height: 100%;
+            position: absolute;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    });
+
+    return () => {
+      socket.emit("leave-room", roomId);
+      socket.off("code-change");
+      socket.off("cursor-change");
+    };
+  }, [roomId]);
+
   const onMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
+
+    editor.onDidChangeModelContent(() => {
+      const code = editor.getValue();
+      setValue(code);
+      socket.emit("code-change", { roomId, code });
+    });
+
+    editor.onDidChangeCursorPosition((e) => {
+      socket.emit("cursor-change", {
+        roomId,
+        position: e.position,
+        userId: socket.id,
+      });
+    });
   };
 
   return (
@@ -35,7 +112,7 @@ const CodeEditor = ({ language = "javascript" }) => {
                 theme={theme === "dark" ? "vs-dark" : "vs"}
                 language={language}
                 value={value}
-                onChange={(value) => setValue(value)}
+                onChange={(val) => setValue(val)}
                 onMount={onMount}
                 options={{
                   minimap: { enabled: false },
@@ -49,7 +126,6 @@ const CodeEditor = ({ language = "javascript" }) => {
             </div>
           </div>
         </div>
-
         <div className="flex flex-col">
           <div className="flex-shrink-0 mb-3">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
