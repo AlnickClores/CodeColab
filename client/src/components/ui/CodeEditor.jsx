@@ -1,6 +1,6 @@
 import { Editor } from "@monaco-editor/react";
 import { useTheme } from "../../context/ThemeContext";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { codeSnippets } from "../../utils/codeSnippets";
 import OutputBox from "./OutputBox";
 import { io } from "socket.io-client";
@@ -24,7 +24,18 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
 
     socket.on("code-change", ({ code }) => {
       if (editorRef.current && code !== editorRef.current.getValue()) {
-        editorRef.current.setValue(code);
+        const editor = editorRef.current;
+        const position = editor.getPosition();
+        const selections = editor.getSelections();
+        const scrollTop = editor.getScrollTop();
+        const scrollLeft = editor.getScrollLeft();
+
+        editor.setValue(code);
+
+        editor.setPosition(position);
+        editor.setSelections(selections);
+        editor.setScrollTop(scrollTop);
+        editor.setScrollLeft(scrollLeft);
       }
     });
 
@@ -76,23 +87,77 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
     };
   }, [roomId]);
 
+  const debounce = (func, wait, immediate = false) => {
+    let timeout;
+    return (...args) => {
+      const later = () => {
+        timeout = null;
+        if (!immediate) func(...args);
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func(...args);
+    };
+  };
+
+  const debouncedEmit = useCallback(
+    debounce((code) => {
+      socket.emit("code-change", { roomId, code });
+    }, 100),
+    [roomId]
+  );
+
   const onMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
 
-    editor.onDidChangeModelContent(() => {
+    let isUpdating = false;
+
+    editor.onDidChangeModelContent((event) => {
+      if (isUpdating) return;
+
       const code = editor.getValue();
       setValue(code);
-      socket.emit("code-change", { roomId, code });
+
+      if (event.isFlush) return;
+
+      debouncedEmit(code);
     });
 
-    editor.onDidChangeCursorPosition((e) => {
-      socket.emit("cursor-change", {
-        roomId,
-        position: e.position,
-        userId: socket.id,
-      });
+    socket.on("code-change", ({ code }) => {
+      if (!editorRef.current || code === editorRef.current.getValue()) return;
+
+      const editor = editorRef.current;
+      const position = editor.getPosition();
+      const selections = editor.getSelections();
+      const scrollTop = editor.getScrollTop();
+      const scrollLeft = editor.getScrollLeft();
+
+      isUpdating = true;
+      editor.executeEdits("remote", [
+        {
+          range: editor.getModel().getFullModelRange(),
+          text: code,
+        },
+      ]);
+      isUpdating = false;
+
+      editor.setPosition(position);
+      editor.setSelections(selections);
+      editor.setScrollTop(scrollTop);
+      editor.setScrollLeft(scrollLeft);
     });
+
+    editor.onDidChangeCursorPosition(
+      debounce((e) => {
+        socket.emit("cursor-change", {
+          roomId,
+          position: e.position,
+          userId: socket.id,
+        });
+      }, 50)
+    );
   };
 
   return (
