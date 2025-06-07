@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { languageVersions } from "../../utils/codeSnippets";
+import socket from "../../lib/socket";
 
-const OutputBox = ({ editorRef, language, roomId, socket }) => {
+const OutputBox = ({ editorRef, language, roomId }) => {
   const [result, setResult] = useState({ output: "", error: "" });
 
   const handleRun = () => {

@@ -1,8 +1,6 @@
 import { Copy, Check } from "lucide-react";
 import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-
-const socket = io("http://localhost:3001");
+import socket from "../../lib/socket";
 
 const RoomInfo = ({ roomId, sessionId }) => {
   const [copied, setCopied] = useState(false);

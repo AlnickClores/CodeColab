@@ -170,6 +170,10 @@ app.post("/execute", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
+
 server.listen(3001, () => {
   console.log("🚀 Server running on http://localhost:3001");
 });
