@@ -121,13 +121,49 @@ io.on("connection", (socket) => {
   });
 });
 
+io.on("connection", (socket) => {
+  socket.on("run-code", async ({ code, language, version, roomId }) => {
+    try {
+      const pistonResponse = await axios.post(
+        "https://emkc.org/api/v2/piston/execute",
+        {
+          language,
+          version,
+          files: [{ content: code }],
+        }
+      );
+
+      io.to(roomId).emit("code-output", {
+        output: pistonResponse.data.run?.output,
+        error: pistonResponse.data.run?.stderr,
+        language,
+      });
+    } catch (error) {
+      io.to(roomId).emit("code-output", {
+        output: "",
+        error: "Execution failed.",
+        language,
+      });
+    }
+  });
+});
+
 app.post("/execute", async (req, res) => {
   try {
+    const { roomId } = req.body;
     const pistonResponse = await axios.post(
       "https://emkc.org/api/v2/piston/execute",
       req.body
     );
     res.json(pistonResponse.data);
+
+    if (roomId) {
+      io.to(roomId).emit("code-output", {
+        output: pistonResponse.data.run?.output,
+        error: pistonResponse.data.run?.stderr,
+        language: req.body.language,
+      });
+    }
   } catch (error) {
     console.error("Execution error:", error.message);
     res.status(500).json({ error: error.message || "Execution failed" });

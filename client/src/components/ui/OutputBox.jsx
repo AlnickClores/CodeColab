@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { languageVersions } from "../../utils/codeSnippets";
 
-const OutputBox = ({ editorRef, language }) => {
+const OutputBox = ({ editorRef, language, roomId, socket }) => {
   const [result, setResult] = useState({ output: "", error: "" });
 
   const handleRun = () => {
@@ -11,31 +11,28 @@ const OutputBox = ({ editorRef, language }) => {
       return;
     }
 
-    fetch("http://localhost:3001/execute", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        language,
-        version: languageVersions[language] || "latest",
-        files: [{ content: code }],
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.run) {
-          setResult({
-            output: data.run.output,
-            error: data.run.stderr,
-          });
-        } else {
-          setResult({ error: "No output returned." });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setResult({ error: "Execution failed." });
-      });
+    socket.emit("run-code", {
+      code,
+      language,
+      version: languageVersions[language] || "latest",
+      roomId,
+    });
   };
+
+  useEffect(() => {
+    const handleOutput = (data) => {
+      setResult({
+        output: data.output,
+        error: data.error,
+      });
+    };
+
+    socket.on("code-output", handleOutput);
+
+    return () => {
+      socket.off("code-output", handleOutput);
+    };
+  }, [socket]);
 
   return (
     <div className="h-full flex flex-col">

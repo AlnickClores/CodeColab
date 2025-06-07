@@ -218,7 +218,12 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
             <div className="h-px bg-slate-200 dark:bg-slate-700"></div>
           </div>
           <div className="flex-1 min-h-0">
-            <OutputBox editorRef={editorRef} language={language} />
+            <OutputBox
+              editorRef={editorRef}
+              language={language}
+              roomId={roomId}
+              socket={socket}
+            />
           </div>
         </div>
       </div>
