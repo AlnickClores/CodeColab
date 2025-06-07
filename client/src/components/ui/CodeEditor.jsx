@@ -12,12 +12,26 @@ const socket = io("http://localhost:3001");
 const CodeEditor = ({ language = "javascript", roomId }) => {
   const { theme } = useTheme();
   const editorRef = useRef();
-  const [value, setValue] = useState(codeSnippets[language]);
+  const [value, setValue] = useState(() => {
+    const savedCode = sessionStorage.getItem(`code-${roomId}`);
+    return savedCode || codeSnippets[language];
+  });
+
   const decorationsRef = useRef([]);
 
   useEffect(() => {
-    setValue(codeSnippets[language]);
-  }, [language]);
+    sessionStorage.setItem(`code-${roomId}`, value);
+  }, [value, roomId]);
+
+  useEffect(() => {
+    const savedCode = sessionStorage.getItem(`code-${roomId}`);
+    if (!savedCode) {
+      setValue(codeSnippets[language]);
+      sessionStorage.setItem(`code-${roomId}`, codeSnippets[language]);
+    } else {
+      setValue(savedCode);
+    }
+  }, [language, roomId]);
 
   useEffect(() => {
     socket.emit("join-room", roomId);
@@ -160,6 +174,11 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
     );
   };
 
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    sessionStorage.setItem(`code-${roomId}`, newValue);
+  };
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6 h-[calc(100vh-8rem)] min-h-[600px]">
@@ -177,7 +196,7 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
                 theme={theme === "dark" ? "vs-dark" : "vs"}
                 language={language}
                 value={value}
-                onChange={(val) => setValue(val)}
+                onChange={handleChange}
                 onMount={onMount}
                 options={{
                   minimap: { enabled: false },
