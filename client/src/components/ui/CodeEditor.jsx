@@ -6,13 +6,12 @@ import OutputBox from "./OutputBox";
 import { io } from "socket.io-client";
 import { getUserColor } from "../../utils/userColors";
 import * as monaco from "monaco-editor";
+import socket from "../../lib/socket";
 
-const socket = io("http://localhost:3001");
-
-const CodeEditor = ({ language = "javascript", roomId }) => {
+const CodeEditor = ({ language = "javascript", roomId, value, setValue }) => {
   const { theme } = useTheme();
   const editorRef = useRef();
-  const [value, setValue] = useState(() => {
+  const [codeValue, setCodeValue] = useState(() => {
     const savedCode = sessionStorage.getItem(`code-${roomId}`);
     return savedCode || codeSnippets[language];
   });
@@ -20,16 +19,14 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
   const decorationsRef = useRef([]);
 
   useEffect(() => {
-    sessionStorage.setItem(`code-${roomId}`, value);
+    if (value !== undefined) {
+      sessionStorage.setItem(`code-${roomId}`, value);
+    }
   }, [value, roomId]);
 
   useEffect(() => {
-    const savedCode = sessionStorage.getItem(`code-${roomId}`);
-    if (!savedCode) {
-      setValue(codeSnippets[language]);
-      sessionStorage.setItem(`code-${roomId}`, codeSnippets[language]);
-    } else {
-      setValue(savedCode);
+    if (value !== undefined) {
+      setValue(value);
     }
   }, [language, roomId]);
 
@@ -132,7 +129,7 @@ const CodeEditor = ({ language = "javascript", roomId }) => {
       if (isUpdating) return;
 
       const code = editor.getValue();
-      setValue(code);
+      setCodeValue(code);
 
       if (event.isFlush) return;
 

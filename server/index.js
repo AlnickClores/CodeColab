@@ -78,6 +78,10 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("cursor-change", { position, userId });
   });
 
+  socket.on("language-change", ({ roomId, language, code }) => {
+    socket.to(roomId).emit("language-change", { language, code });
+  });
+
   socket.on("leave-room", (roomId) => {
     if (rooms.has(roomId)) {
       rooms.get(roomId).delete(socket.id);
