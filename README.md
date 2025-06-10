@@ -6,7 +6,7 @@
 
 ###
 
-<p align="left">TechStack Used:</p>
+<p align="left">TechStack Used</p>
 
 ###
 
