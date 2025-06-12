@@ -3,6 +3,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const axios = require("axios");
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 const server = http.createServer(app);
@@ -178,6 +179,6 @@ app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
-server.listen(3001, () => {
-  console.log("🚀 Server running on http://localhost:3001");
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
