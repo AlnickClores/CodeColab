@@ -124,9 +124,7 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
     logRoomsStatus();
   });
-});
 
-io.on("connection", (socket) => {
   socket.on("run-code", async ({ code, language, version, roomId }) => {
     try {
       const pistonResponse = await axios.post(
