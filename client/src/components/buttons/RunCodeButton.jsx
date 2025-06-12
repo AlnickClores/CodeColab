@@ -8,11 +8,14 @@ const RunCodeButton = ({ code, language, onResult }) => {
   const runCode = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:3001/execute", {
-        language,
-        version: languageVersions[language] || "latest",
-        files: [{ content: code }],
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/execute`,
+        {
+          language,
+          version: languageVersions[language] || "latest",
+          files: [{ content: code }],
+        }
+      );
 
       const data = response.data;
 

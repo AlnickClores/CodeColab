@@ -11,7 +11,9 @@ const CreateRoomButton = () => {
   const handleCreateRoom = async () => {
     setError("");
     try {
-      const res = await fetch("http://localhost:3001/", { method: "GET" });
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/`, {
+        method: "GET",
+      });
       if (!res.ok) throw new Error("Server not responding");
       const roomId = nanoid(6);
       socket.emit("create-room", roomId);
