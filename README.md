@@ -7,7 +7,7 @@
 
 ## 🌐 Live Demo
 
-👉 [**Click here to try CodeCollab live**](https://codecollab.vercel.app)
+👉 [**Click here to try CodeCollab live**](https://codlab.vercel.app/)
 
 > ⚠️ For the best experience, open in two browser tabs or devices to test real-time collaboration.
 
