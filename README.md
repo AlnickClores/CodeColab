@@ -1,49 +1,84 @@
-<h1 align="left">💻 CodeCollab</h1>
+# CodLab
 
-<p align="left">
-  <strong>CodeCollab</strong> is a real-time collaborative IDE designed for seamless pair programming. It allows multiple developers to write, edit, and execute code together—live and in sync—just like Google Docs but for code!
-</p>
+A real-time collaborative IDE for seamless pair programming, allowing multiple developers to write, edit, and execute code together live and in sync.
 
+## Live Demo
 
-## 🌐 Live Demo
+[https://codlab.vercel.app/](https://codlab.vercel.app/)
 
-👉 [**Click here to try CodeCollab live**](https://codlab.vercel.app/)
+Deployed using **Vercel**.
 
-> ⚠️ For the best experience, open in two browser tabs or devices to test real-time collaboration.
+> ⚠️ Important Note
+> 
+> The frontend of CodLab is deployed, but the backend server is not hosted yet. As a result, real-time collaboration and code execution may not work properly on the live demo.
+> If you want to experience the full functionality, please clone the repository and run the backend locally.
 
+## Description
 
-## 🚀 Features
+**CodLab** is a real-time collaborative code editor inspired by tools like Google Docs and Replit. It enables developers to collaborate in shared rooms where code changes are instantly synchronized across all participants.
 
-- 👨‍💻 Real-time collaborative editing
-- 📡 Live communication via **Socket.IO**
-- ⚙️ Backend powered by **Node.js** and **Express**
-- 👥 Shared room sessions for group or pair programming
-- 🖥️ **Live code execution** using the [Piston API](https://github.com/engineer-man/piston)
+In addition to live editing, CodLab supports real-time communication between clients and allows users to execute code directly in the browser using a remote execution engine.
 
+The goal of this project is to demonstrate real-time systems, WebSocket-based communication, and collaborative application design in a modern full-stack JavaScript environment.
 
-## 🛠️ Tech Stack
+## Key Features
 
-<table>
-  <tr>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" /><br><b>JavaScript</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" /><br><b>React</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="40" /><br><b>Node.js</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="40" /><br><b>Express</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="40" /><br><b>Socket.IO</b></td>
-  </tr>
-</table>
+* Real-time collaborative code editing
+* Shared rooms for pair or group programming
+* Live code execution via Piston API
+* Instant code synchronization using Socket.IO
+* Simple and intuitive collaborative workflow
 
-- 🧪 Code Execution: [**Piston API**](https://github.com/engineer-man/piston)
+## Tech Stack
 
+* React
+* JavaScript
+* Node.js
+* Express
+* Socket.IO
 
-## 🧠 Future Improvements
+**Code Execution:** Piston API
 
-- ✨ Syntax highlighting for multiple languages
-- 💾 Code saving & loading
-- 🧑‍🤝‍🧑 Enhanced user presence indicators
+## Usage
 
+1. Open the CodeCollab live demo.
+2. Create or join a shared room.
+3. Start writing or editing code collaboratively.
+4. See changes reflected in real time across all connected users.
+5. Run the code to view execution results instantly.
 
-## 🙌 Acknowledgements
+## Contributing
 
-- Built with inspiration from **Google Docs**, **Replit**, and other collaborative development platforms.
-- Code execution handled via the amazing [Piston API](https://github.com/engineer-man/piston) by [@engineer-man](https://github.com/engineer-man).
+Contributors are welcome. You can help by:
+
+* Reporting bugs
+* Suggesting new features
+* Improving UI/UX
+* Optimizing real-time performance
+* Submitting pull requests
+
+### How to contribute
+
+1. Fork the repository
+2. Create a feature branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Commit your changes:
+
+   ```bash
+   git commit -m "Add: your feature description"
+   ```
+4. Push to your fork and open a pull request
+
+## Authors and Acknowledgments
+
+### Author
+
+* [Alnick Clores](https://alnickdev.me/)
+
+### Acknowledgments
+
+* Inspired by collaborative platforms such as Google Docs and Replit
+* Code execution powered by the [Piston API](https://github.com/engineer-man/piston)
