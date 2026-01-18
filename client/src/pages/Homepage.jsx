@@ -17,9 +17,9 @@ export default function Homepage() {
               <span className="text-blue-600"> In Real Time</span>
             </h2>
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-8 max-w-3xl mx-auto">
-              CodeCollab is a real-time collaborative coding IDE that lets you
-              and your coding buddy write, edit, and debug code together
-              seamlessly, no matter where you are.
+              CodLab is a real-time collaborative coding IDE that lets you and
+              your coding buddy write, edit, and debug code together seamlessly,
+              no matter where you are.
             </p>
           </div>
 
@@ -99,8 +99,7 @@ export default function Homepage() {
                 Multiple Languages
               </h4>
               <p className="text-slate-600 dark:text-slate-400 text-sm">
-                Support for JavaScript, Python, Java, C++, and many more
-                languages.
+                Support for JavaScript, Python, Java, C++ programming languages.
               </p>
             </div>
           </div>

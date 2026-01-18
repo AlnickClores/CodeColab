@@ -11,25 +11,22 @@ const CreateRoomButton = ({ loading, setLoading }) => {
   const handleCreateRoom = async () => {
     setError("");
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/`, {
-          method: "GET",
-        });
-        if (!res.ok) throw new Error("Server not responding");
-        const roomId = nanoid(6);
-        socket.emit("create-room", roomId);
-        navigate(`/room/${roomId}`);
-        console.log("Room created with ID:", roomId);
-        setLoading(false);
-      } catch (err) {
-        setError(
-          "Server is not running. Please start the server and try again.",
-        );
-        setLoading(false);
-        console.error("Error creating room:", err);
-      }
-    }, 3000);
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/`, {
+        method: "GET",
+      });
+      if (!res.ok) throw new Error("Server not responding");
+      const roomId = nanoid(6);
+      socket.emit("create-room", roomId);
+      navigate(`/room/${roomId}`);
+      console.log("Room created with ID:", roomId);
+      setLoading(false);
+    } catch (err) {
+      setError("Server is not running. Please start the server and try again.");
+      setLoading(false);
+      console.error("Error creating room:", err);
+    }
   };
 
   return (

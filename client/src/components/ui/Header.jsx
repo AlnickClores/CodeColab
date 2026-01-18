@@ -38,7 +38,7 @@ const Header = () => {
           </svg>
 
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Codlab
+            CodLab
           </h1>
         </Link>
         <div className="flex items-center space-x-6">
