@@ -38,13 +38,13 @@ const Header = () => {
           </svg>
 
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            CodeCollab
+            Codlab
           </h1>
         </Link>
         <div className="flex items-center space-x-6">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700"
+            className="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
             aria-label="Toggle theme"
           >
             {theme === "light" ? (
