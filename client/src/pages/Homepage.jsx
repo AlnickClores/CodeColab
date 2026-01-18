@@ -1,8 +1,11 @@
 import { Code, Users, Zap } from "lucide-react";
 import JoinRoom from "../components/ui/JoinRoom";
 import CreateRoomButton from "../components/buttons/CreateRoomButton";
+import { useState } from "react";
 
 export default function Homepage() {
+  const [loading, setLoading] = useState(false);
+
   return (
     <div className="container mx-auto px-4 py-16 md:py-24">
       {/* Hero Section */}
@@ -56,7 +59,7 @@ export default function Homepage() {
 
             {/* Create Room */}
             <div className="flex justify-center mb-6">
-              <CreateRoomButton />
+              <CreateRoomButton loading={loading} setLoading={setLoading} />
             </div>
 
             <div className="flex items-center my-6">
